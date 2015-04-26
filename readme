@@ -1,2 +1,35 @@
-How to setup and use git for our project?
+Steps to follow to use git:
+
+1. Clone the existing repository.
+	git clone git@github.com:sumitdorle/630_finalProject.git
+   you need to do this only once to get the copy of the repository on your local machine.
+
+2. Nobody should push their changes directly into the master branch. When you start working (implementing) some feature you should create a branch in 630_finalProject
+   repo.
+   We can merge your changed code from this newly created branch later into master once we make sure it doesnt hamper the already implemented functionality in       
+   master branch.
+
+   How to create a branch:  
+   	git checkout -b test_branch  
+   (This should create a branch locally.)
+
+   The remote branch is automatically created when you push it to the remote server. So when you feel ready for it, you can just do:
+   	git push origin test_branch
+
+3. To switch between branches
+	git checkout branch_name
+
+4. To get latest code from branch (we should specify from which remote branch we want to pull project code)
+	git pull origin branch_name
+
+5. To commit and push your code on your created branch
+	-make sure you checkout correct branch (i.e. by doing git checkout)
+	git add . (will add all the changes)
+	git commit -am "commeting on the changes"
+	git push origin branch_name  (this will push your code on your newly created branch and not on master)
+
+6. click on branches link on your github page and create a pull request asking to merge your code in master.
+	base branch will be your branch
+	source branch should be master
+	
 
