@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<meta charset="UTF-8">
+	<title>Blockly Dude</title>
+	<script src="./js/phaser.min.js"></script>
+	<script src="./js/blockly_compressed.js"></script>
+  	<script src="./js/blocks_compressed.js"></script>
+  	<script src="./js/javascript_compressed.js"></script>
+  	<script src="./js/acorn_interpreter.js"></script>
+  	<script src="./js/dudePhaser.js"></script>
+  	<script src="./js/move.js"></script>
+  	<script src="./js/msg/js/en.js"></script>
+</head>
+<body>
+	<div align="center">
+		<h2>Blockly Dude</h2>
+		<div id="gameArea" style="height: 480px; width: 500px; border: solid 1px;"></div>
+		<br/>
+		<div id="blocklyDiv" style="height: 480px; width: 500px; border: solid 1px;"></div>
+		<button onclick="showCode()">Show JavaScript</button>
+		<button onclick="runCode()">Run JavaScript</button>
+		
+		<xml id="toolbox" style="display: none">
+  			<block type="move_forwd_backwd"></block>	
+		</xml>
+		
+		<script type="text/javascript">
+		
+		Blockly.inject(document.getElementById('blocklyDiv'),{toolbox: document.getElementById('toolbox')});
+		
+		
+		function showCode()
+		{
+		      // Generate JavaScript code and display it.
+		      Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+		      var code = Blockly.JavaScript.workspaceToCode();
+		      alert(code);
+		 }
+		
+		function runCode() {
+		      // Generate JavaScript code and run it.
+		      window.LoopTrap = 1000;
+		      Blockly.JavaScript.INFINITE_LOOP_TRAP =
+		          'if (--window.LoopTrap == 0) throw "Infinite loop.";\n';
+		      var code = Blockly.JavaScript.workspaceToCode();
+		      var myInterpreter = new Interpreter(code, initApi);
+		      myInterpreter.run();
+		 }
+		
+		function initApi(interpreter, scope) 
+		{
+			  // Add an API function for the alert() block.
+			var wrapper = function(text) 
+			{
+			    text = text ? text.toString() : '';
+			    return interpreter.createPrimitive(alert(text));
+			};
+			  interpreter.setProperty(scope, 'alert', interpreter.createNativeFunction(wrapper));
+			
+			wrapper = function(text) 
+			{
+				    //text = text ? text.toString() : '';
+				    return interpreter.createPrimitive(moveForward(text));
+			};
+		    interpreter.setProperty(scope, 'moveForward', interpreter.createNativeFunction(wrapper));
+		}
+		</script>
+		
+	</div>
+</body>
+</html>
