@@ -10,6 +10,7 @@
   	<script src="./js/acorn_interpreter.js"></script>
   	<script src="./js/dudePhaser.js"></script>
   	<script src="./js/move.js"></script>
+  	<script src="./js/other.js"></script>
   	<script src="./js/msg/js/en.js"></script>
 </head>
 <body>
@@ -22,7 +23,47 @@
 		<button onclick="runCode()">Run JavaScript</button>
 		
 		<xml id="toolbox" style="display: none">
-  			<block type="move_forwd_backwd"></block>	
+  			<category name="Boolean">
+        		<block type="logic_compare"></block>
+        		<block type="logic_operation"></block>
+        		<block type="logic_negate"></block>
+        		<block type="logic_boolean"></block>
+        		<block type="logic_null"></block>
+        		<block type="logic_ternary"></block>
+      		</category>
+      		<category name="Loops">
+      			<block type="controls_repeat_ext">
+        			<value name="TIMES">
+          				<block type="math_number">
+            				<field name="NUM">10</field>
+          				</block>
+        			</value>
+      			</block>
+      			<block type="controls_whileUntil"></block>
+      				<block type="controls_for">
+        				<field name="VAR">i</field>
+        				<value name="FROM">
+          					<block type="math_number">
+            					<field name="NUM">1</field>
+          					</block>
+        				</value>
+        				<value name="TO">
+          					<block type="math_number">
+            					<field name="NUM">10</field>
+          					</block>
+        				</value>
+        				<value name="BY">
+          					<block type="math_number">
+            					<field name="NUM">1</field>
+          					</block>
+        				</value>
+      				</block>
+      				<block type="controls_forEach"></block>
+      				<block type="controls_flow_statements"></block>
+    		</category>
+      		<category name="Custom">
+  				<block type="move_forwd_backwd"></block>
+  			</category>
 		</xml>
 		
 		<script type="text/javascript">
@@ -40,12 +81,23 @@
 		
 		function runCode() {
 		      // Generate JavaScript code and run it.
-		      window.LoopTrap = 1000;
-		      Blockly.JavaScript.INFINITE_LOOP_TRAP =
-		          'if (--window.LoopTrap == 0) throw "Infinite loop.";\n';
-		      var code = Blockly.JavaScript.workspaceToCode();
-		      var myInterpreter = new Interpreter(code, initApi);
-		      myInterpreter.run();
+		      //window.LoopTrap = 1000;
+		      //Blockly.JavaScript.INFINITE_LOOP_TRAP =
+		       //   'if (--window.LoopTrap == 0) throw "Infinite loop.";\n';
+		      //var code = Blockly.JavaScript.workspaceToCode();
+		      //var myInterpreter = new Interpreter(code, initApi);
+		      //myInterpreter.run();
+		     Blockly.JavaScript.addReservedWords('code');
+			 var code = Blockly.JavaScript.workspaceToCode();
+			 var myInterpreter = new Interpreter(code, initApi);
+		     //myInterpreter.run();
+			 setInterval(function(){myInterpreter.step()}, 100); 
+		     /*try {
+  				eval(code);
+			 } catch (e) {
+  				alert(e);
+			}*/
+			
 		 }
 		
 		function initApi(interpreter, scope) 
@@ -56,14 +108,20 @@
 			    text = text ? text.toString() : '';
 			    return interpreter.createPrimitive(alert(text));
 			};
-			  interpreter.setProperty(scope, 'alert', interpreter.createNativeFunction(wrapper));
+			interpreter.setProperty(scope, 'alert', interpreter.createNativeFunction(wrapper));
 			
-			wrapper = function(text) 
+			wrapper = function(move_x) 
 			{
-				    //text = text ? text.toString() : '';
-				    return interpreter.createPrimitive(moveForward(text));
+			    return interpreter.createPrimitive(moveForward(move_x));
 			};
-		    interpreter.setProperty(scope, 'moveForward', interpreter.createNativeFunction(wrapper));
+			interpreter.setProperty(scope, 'moveForward', interpreter.createNativeFunction(wrapper));
+			
+			wrapper = function(move_x) 
+			{
+			    return interpreter.createPrimitive(moveBackward(move_x));
+			};
+			interpreter.setProperty(scope, 'moveBackward', interpreter.createNativeFunction(wrapper));
+			
 		}
 		</script>
 		
