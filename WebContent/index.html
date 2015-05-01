@@ -79,6 +79,14 @@
 		      alert(code);
 		 }
 		
+		function rundude(interpreter, cb){
+			alert("here");
+			if(interpreter)
+				interpreter.run();
+			cb();
+		}
+		
+		
 		function runCode() {
 		      // Generate JavaScript code and run it.
 		      //window.LoopTrap = 1000;
@@ -90,8 +98,24 @@
 		     Blockly.JavaScript.addReservedWords('code');
 			 var code = Blockly.JavaScript.workspaceToCode();
 			 var myInterpreter = new Interpreter(code, initApi);
+			 
+			 alert(moveRight);
+			 alert(moveLeft);
+		     
+		     if (!moveRight){
+		     	rundude(myInterpreter, function(){
+		     		alert("moving right");
+		     	})
+		     }
+		     else if (!moveLeft) {
+		     	rundude(myInterpreter, function(){
+		     		alert("moving left");
+		     	})
+		     }
+		     
+		     
 		     //myInterpreter.run();
-			 setInterval(function(){myInterpreter.step()}, 100); 
+			 //setInterval(function(){myInterpreter.step()}, 100); 
 		     /*try {
   				eval(code);
 			 } catch (e) {

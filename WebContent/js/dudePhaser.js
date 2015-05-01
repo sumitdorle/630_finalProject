@@ -53,7 +53,7 @@ var dudePhaser =
 	        //  Move to the left
 	    	player.animations.play('left');
 	        player.body.velocity.x = move_x;
-	        setTimeout(function(){moveLeft = false;}, 300);
+	        //setTimeout(function(){moveLeft = false;}, 300);
 	    }
 	    else if (moveRight == true)
 	    {
@@ -61,7 +61,7 @@ var dudePhaser =
 	        //  Move to the right
 	    	player.animations.play('right');
 	        player.body.velocity.x = move_x;
-	        setTimeout(function(){moveRight = false;}, 300);
+	        //setTimeout(function(){moveRight = false;}, 300);
 	    }
 	    else
 	    {
