@@ -1,6 +1,30 @@
 ////////////////////////////////////////////////////////
 //                      comparison Block
 ////////////////////////////////////////////////////////
+Blockly.Blocks['value'] = {
+  init: function() {
+    this.setHelpUrl('http://www.example.com/');
+    this.setColour(65);
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldTextInput("0"), "Value");
+    this.setOutput(true);
+    this.setTooltip('');
+  }
+};
+
+Blockly.JavaScript['value'] = function(block) {
+  var text_value = block.getFieldValue('Value');
+  // TODO: Assemble JavaScript into code variable.
+  var code = '...';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+
+
+////////////////////////////////////////////////////////
+//                      comparison Block
+////////////////////////////////////////////////////////
 Blockly.Blocks['comparison'] = {
   init: function() {
     this.setHelpUrl('http://www.example.com/');

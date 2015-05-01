@@ -20,10 +20,12 @@ Blockly.Blocks['fire'] = {
   }
 };
 
-Blockly.JavaScript['fire'] = function(block) {
-var value_degree = block.getFieldValue('DEGREE');
-var value_range = block.getFieldValue('RANGE');
-  var code = 'fireAtGivenRangeAndDegree(' + value_degree +',' + var value_range + ');';
+Blockly.JavaScript['fire'] = function(block) 
+{
+  // TODO: Assemble JavaScript into code variable.
+  var value_degree = block.getFieldValue('DEGREE');
+  var value_range = block.getFieldValue('RANGE');
+  var code = 'fireAtGivenRangeAndDegree(' + value_degree + ',' + value_range + ')';
   return code;
 };
 
@@ -182,6 +184,3 @@ Blockly.JavaScript['tank_health'] = function(block) {
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
-
-
-
