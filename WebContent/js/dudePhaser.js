@@ -10,7 +10,7 @@ var countForward = 0;
 var countBack = 0;
 var execute = true;
 var player;
-var time;
+var timeout = 2000;
 
 	 //var movedude = function(flag, callback){
 	 //	alert("function called");
@@ -66,10 +66,13 @@ var dudePhaser =
 	
 	update : function()
 	{
-		//cursors = game.input.keyboard.createCursorKeys();
+	
+	 if (game.time.time> timeout) { 
+	 	
+	 	
+	    //call_your_function();
+	    //cursors = game.input.keyboard.createCursorKeys();
 		//player.body.velocity.x = 0;
-		
-		
 		if (moveLeft && !isRunning)
 		{
 			alert("moveLeft " + moveLeft );
@@ -78,8 +81,10 @@ var dudePhaser =
 			dudePhaser.movedude("moveLeft", function(bool){
 				alert("bool " + bool);
 				if (bool){
-					moveLeft = false;
-					isRunning = false;
+					//setTimeout(function(){
+						moveLeft = false;
+						isRunning = false;
+					//}, 300);
 				}
 			});
 			
@@ -96,8 +101,10 @@ var dudePhaser =
 			dudePhaser.movedude("moveRight", function(bool){
 				alert(bool);
 				if (bool){
-					moveRight = false;
-					isRunning = false;
+					//setTimeout(function(){
+						moveRight = false;
+						isRunning = false;
+					//}, 300);
 				}
 			});
 			
@@ -113,6 +120,9 @@ var dudePhaser =
 	        player.animations.stop();
 	        player.frame = 4;
 	    }
+	    
+	  timeout= game.time.time+2000; 
+	  }
 
 	}, 
 	
@@ -126,7 +136,7 @@ var dudePhaser =
  	move : function(direction, callback){
  		player.animations.play(direction);
 	    player.body.velocity.x = move_x;
-	    dudePhaser.sleepFor(300);
+	    //dudePhaser.sleepFor(300);
 		callback(true);
  	},
  	
