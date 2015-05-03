@@ -60,10 +60,7 @@ Blockly.JavaScript['move_forwd_backwd'] = function(block) {
   
   if(dropdown_register == "forward")
   {
-	//code = 'for(var i = 0; i < 4; i++){';
 	code = 'moveForward('+dropdown_name+');';
-	//code += 'setTimeout(dummy, 200);';
-	//code += '}';
   }
   if(dropdown_register == "backward")
   {

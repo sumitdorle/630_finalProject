@@ -69,6 +69,7 @@
 		<script type="text/javascript">
 		
 		Blockly.inject(document.getElementById('blocklyDiv'),{toolbox: document.getElementById('toolbox')});
+
 		
 		
 		function showCode()
@@ -78,55 +79,20 @@
 		      var code = Blockly.JavaScript.workspaceToCode();
 		      alert(code);
 		 }
-		
-		function rundude(interpreter, cb){
-			alert("here");
-			if(interpreter)
-				interpreter.run();
-			cb();
-		}
-		
-		
-		function runCode() {
-		      // Generate JavaScript code and run it.
-		      //window.LoopTrap = 1000;
-		      //Blockly.JavaScript.INFINITE_LOOP_TRAP =
-		       //   'if (--window.LoopTrap == 0) throw "Infinite loop.";\n';
-		      //var code = Blockly.JavaScript.workspaceToCode();
-		      //var myInterpreter = new Interpreter(code, initApi);
-		      //myInterpreter.run();
-		     Blockly.JavaScript.addReservedWords('code');
-			 var code = Blockly.JavaScript.workspaceToCode();
-			 var myInterpreter = new Interpreter(code, initApi);
-			 
-			 alert(moveRight);
-			 alert(moveLeft);
-		     
-		     if (!moveRight){
-		     	rundude(myInterpreter, function(){
-		     		alert("moving right");
-		     	})
-		     }
-		     else if (!moveLeft) {
-		     	rundude(myInterpreter, function(){
-		     		alert("moving left");
-		     	})
-		     }
-		     
-		     
-		     //myInterpreter.run();
-			 //setInterval(function(){myInterpreter.step()}, 100); 
-		     /*try {
-  				eval(code);
-			 } catch (e) {
-  				alert(e);
-			}*/
-			
+		 
+		 function runCode() {
+		 		 //alert("in runcode!");
+			 	 Blockly.JavaScript.addReservedWords('code');
+				 var code = Blockly.JavaScript.workspaceToCode();
+				 var myInterpreter = new Interpreter(code, initApi);
+				 //myInterpreter.run();
+				 setInterval(function(){myInterpreter.step()}, 100); 
 		 }
+		
 		
 		function initApi(interpreter, scope) 
 		{
-			  // Add an API function for the alert() block.
+			// Add an API function for the alert() block.
 			var wrapper = function(text) 
 			{
 			    text = text ? text.toString() : '';
