@@ -85,8 +85,8 @@
 			 	 Blockly.JavaScript.addReservedWords('code');
 				 var code = Blockly.JavaScript.workspaceToCode();
 				 var myInterpreter = new Interpreter(code, initApi);
-				 //myInterpreter.run();
-				 setInterval(function(){myInterpreter.step()}, 100); 
+				 myInterpreter.run();
+				 //setInterval(function(){myInterpreter.step()}, 100); 
 		 }
 		
 		
