@@ -8,10 +8,12 @@
   	<script src="./js/blocks_compressed.js"></script>
   	<script src="./js/javascript_compressed.js"></script>
   	<script src="./js/acorn_interpreter.js"></script>
-  	<script src="./js/dudePhaser.js"></script>
+  	<!--<script src="./js/dudePhaser.js"></script>-->
   	<script src="./js/move.js"></script>
   	<script src="./js/msg/js/en.js"></script>
 	<script src="./js/basic_blocks.js"></script>
+	<script src="./js/Main.js"></script>
+	<script src="./js/tank_blocks.js"></script>
 </head>
 <body>
 	<div align="center">
@@ -73,10 +75,10 @@
 			
 			wrapper = function(text) 
 			{
-				    //text = text ? text.toString() : '';
-				    return interpreter.createPrimitive(moveForward(text));
+				    text = text ? text.toString() : '';
+				    return interpreter.createPrimitive(Main(text));
 			};
-		    interpreter.setProperty(scope, 'moveForward', interpreter.createNativeFunction(wrapper));
+		    interpreter.setProperty(scope, 'Main', interpreter.createNativeFunction(wrapper));
 		}
 		</script>
 		
