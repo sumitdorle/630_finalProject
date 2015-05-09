@@ -5,31 +5,6 @@ var game = new Phaser.Game(470, 480, Phaser.AUTO, 'gameArea');
 var move_x=0, player, cursors;
 var moveRight = false;
 var moveLeft = false;
-var isRunning = false;
-var countForward = 0;
-var countBack = 0;
-var execute = true;
-var player;
-var timeout = 2000;
-
-	 //var movedude = function(flag, callback){
-	 //	alert("function called");
-	 //	alert(player);
-	 	
-  //  	if (flag === "moveLeft"){
-  //  		player.animations.play('left');
-	 //    	player.body.velocity.x = move_x;
-	 //    	isRunning = true;
-	 //    	return callback(true);
-  //  	}
-  //  	else if (flag === "moveRight"){
-		// 	player.animations.play('right');
-		// 	player.body.velocity.x = move_x;
-		// 	isRunning = true;
-		// 	return callback(true);
-  //  	}
-  //  	return callback(false);
-  //  }
 
 var dudePhaser =
 {
@@ -63,103 +38,51 @@ var dudePhaser =
 		
 		
 	},
-	
+
 	update : function()
 	{
-	
-	 if (game.time.time> timeout) { 
-	 	
-	 	
-	    //call_your_function();
-	    //cursors = game.input.keyboard.createCursorKeys();
-		//player.body.velocity.x = 0;
-		if (moveLeft && !isRunning)
-		{
-			alert("moveLeft " + moveLeft );
-			alert("moveRight " + moveRight);
-			
-			dudePhaser.movedude("moveLeft", function(bool){
-				alert("bool " + bool);
-				if (bool){
-					//setTimeout(function(){
-						moveLeft = false;
-						isRunning = false;
-					//}, 300);
-				}
-			});
-			
-			//if (!isRunning)
-				//dudePhaser.sleepFor(300);
-			
-			alert("moveLeft after " + moveLeft );
-			alert("moveRight after " + moveRight)
-		} 
-		else if (moveRight && !isRunning){
-			alert("moveLeft " + moveLeft );
-			alert("moveRight " + moveRight);
-			
-			dudePhaser.movedude("moveRight", function(bool){
-				alert(bool);
-				if (bool){
-					//setTimeout(function(){
-						moveRight = false;
-						isRunning = false;
-					//}, 300);
-				}
-			});
-			
-			//if (!isRunning)
-				//dudePhaser.sleepFor(300);
-			
-			alert("moveLeft after " + moveLeft );
-			alert("moveRight after " + moveRight);
-		}
-		else if(!moveRight && !moveRight)
+		cursors = game.input.keyboard.createCursorKeys();
+		
+		player.body.velocity.x = 0;
+
+	    if (moveLeft == true)
 	    {
-	        //Stand still
+	        //  Move to the left
+	    	player.animations.play('left');
+	        player.body.velocity.x = move_x;
+	        setTimeout(function()
+	        {
+	        	moveLeft = false;
+	        	setTimeout(function(){execute = true;}, 10);
+	        }, 300);
+	    }
+	    else if (moveRight == true)
+	    {
+	    	//moveRight = false;
+	        //  Move to the right
+	    	var animationReference = player.animations.play('right');
+	        player.body.velocity.x = move_x;
+	        //alert(animationReference.isFinished);
+	       	setTimeout(function()
+	       	{
+	       		moveRight = false;
+	       		setTimeout(function(){execute = true;}, 10);
+	       	}, 300);
+	    }
+	    else
+	    {
+	        //  Stand still
 	        player.animations.stop();
+
 	        player.frame = 4;
 	    }
-	    
-	  timeout= game.time.time+2000; 
-	  }
 
-	}, 
-	
-	
-	sleepFor : function( sleepDuration ){
-	  alert("in sleeFor");
-	  var now = new Date().getTime();
-	  while(new Date().getTime() < (now + sleepDuration)){  } 
-	},
-	
- 	move : function(direction, callback){
- 		player.animations.play(direction);
-	    player.body.velocity.x = move_x;
-	    //dudePhaser.sleepFor(300);
-		callback(true);
- 	},
- 	
- 	movedude : function(flag, callback){
-	   alert("in movedude");
-	   
-	   	if (flag === "moveLeft"){
-	     	dudePhaser.move("left", function(flag){
-	     		if (flag){
-		     		isRunning = true;
-		     		callback(true);
-	     		}
-	     	});
-	   	}
-	   	else if (flag === "moveRight"){
-			dudePhaser.move("right", function(flag){
-	     		if (flag){
-		     		isRunning = true;
-		     		callback(true);
-	     		}
-	     	});
-	   	}
-		callback(false);
+	    //  Allow the player to jump if they are touching the ground.
+	    if (cursors.up.isDown && player.body.touching.down)
+	    {
+	        player.body.velocity.y = -350;
+	    }
+	    
 	}
 };
 

@@ -66,5 +66,6 @@ Blockly.JavaScript['move_forwd_backwd'] = function(block) {
   {
 	code = 'moveBackward('+dropdown_name+');';
   }
+  
   return code;
 };

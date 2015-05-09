@@ -8,6 +8,8 @@
   	<script src="./js/blocks_compressed.js"></script>
   	<script src="./js/javascript_compressed.js"></script>
   	<script src="./js/acorn_interpreter.js"></script>
+  	<script src="./js/asyncHelpers.js"></script>
+  	<script src="./js/nativeHelpers.js"></script>
   	<script src="./js/dudePhaser.js"></script>
   	<script src="./js/move.js"></script>
   	<script src="./js/other.js"></script>
@@ -21,6 +23,7 @@
 		<div id="blocklyDiv" style="height: 480px; width: 500px; border: solid 1px;"></div>
 		<button onclick="showCode()">Show JavaScript</button>
 		<button onclick="runCode()">Run JavaScript</button>
+		<button onclick="nextStep()">Next</button>
 		
 		<xml id="toolbox" style="display: none">
   			<category name="Boolean">
@@ -69,8 +72,10 @@
 		<script type="text/javascript">
 		
 		Blockly.inject(document.getElementById('blocklyDiv'),{toolbox: document.getElementById('toolbox')});
-
 		
+		var myInterpreter, code;
+		var execute = true;
+		var first = true;
 		
 		function showCode()
 		{
@@ -79,20 +84,26 @@
 		      var code = Blockly.JavaScript.workspaceToCode();
 		      alert(code);
 		 }
-		 
-		 function runCode() {
-		 		 //alert("in runcode!");
-			 	 Blockly.JavaScript.addReservedWords('code');
-				 var code = Blockly.JavaScript.workspaceToCode();
-				 var myInterpreter = new Interpreter(code, initApi);
-				 myInterpreter.run();
-				 //setInterval(function(){myInterpreter.step()}, 100); 
-		 }
 		
+		function runCode() {
+		      // Generate JavaScript code and run it.
+		      //window.LoopTrap = 1000;
+		      //Blockly.JavaScript.INFINITE_LOOP_TRAP =
+		       //   'if (--window.LoopTrap == 0) throw "Infinite loop.";\n';
+		      //var code = Blockly.JavaScript.workspaceToCode();
+		      //var myInterpreter = new Interpreter(code, initApi);
+		      //myInterpreter.run();
+		     
+		     Blockly.JavaScript.addReservedWords('code');
+			 code = Blockly.JavaScript.workspaceToCode();
+			 myInterpreter = new Interpreter(code, initApi);
+			 //myInterpreter = new AsyncInterpreterRunner(code, initApi);
+			 setInterval(function(){nextStep();}, 70);
+		 }
 		
 		function initApi(interpreter, scope) 
 		{
-			// Add an API function for the alert() block.
+			  // Add an API function for the alert() block.
 			var wrapper = function(text) 
 			{
 			    text = text ? text.toString() : '';
@@ -112,6 +123,20 @@
 			};
 			interpreter.setProperty(scope, 'moveBackward', interpreter.createNativeFunction(wrapper));
 			
+			wrapper = function(text) 
+			{
+			    return interpreter.createPrimitive(nextStep());
+			};
+			interpreter.setProperty(scope, 'nexStep', interpreter.createNativeFunction(wrapper));
+			
+		}
+		
+		function nextStep()
+		{
+			if(execute)
+			{
+				myInterpreter.step();
+			}
 		}
 		</script>
 		
