@@ -98,7 +98,7 @@ EnemyTank.prototype.update = function() {
 
 };
 
-var game = new Phaser.Game(610, 480, Phaser.AUTO, 'gameArea', { preload: preload, create: create, update: update });
+var game = new Phaser.Game(600, 500, Phaser.AUTO, 'phaserDiv', { preload: preload, create: create, update: update });
 
 function preload() 
 {
@@ -251,7 +251,7 @@ function Scan()
     		if (game.time.now > nextFire && bullets.countDead() > 0)
             {
                 nextFire = game.time.now + fireRate;
-				alert(nextFire);
+				//alert(nextFire);
                 var bullet = bullets.getFirstDead();
 
                 bullet.reset(turret.x, turret.y);
@@ -282,7 +282,7 @@ function update()
 	Scan();
     if (game.physics.arcade.collide(tank))
     {
-		alert("collision");
+		//alert("collision");
         tank.angle -= 4;
     }
 	
