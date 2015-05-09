@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>RoBlock War</title>
+	<script src="./js/phaser.min.js"></script>
+	<script src="./js/blockly_compressed.js"></script>
+  	<script src="./js/blocks_compressed.js"></script>
+  	<script src="./js/javascript_compressed.js"></script>
+  	<script src="./js/acorn_interpreter.js"></script>
+  	<script src="./js/asyncHelpers.js"></script>
+  	<script src="./js/nativeHelpers.js"></script>
+  	<script src="./js/javascript_compressed.js"></script>
+  	<script src="./js/msg/js/en.js"></script>
+  	<script src="./js/phaser/RoblockPhaser.js"></script>
+  	<script src="./js/custom_blocks/move.js"></script>
+  	
+  	<!-- CSS -->
+  	<link rel="stylesheet" type="text/css" href="./style/style.css">
+</head>
+<body>
+	<div id="heading">
+		<img id="logo" src="./assets/logo.png">
+	</div>
+	<div id="gameArea">
+		<div id="phaserDiv" ></div>
+		<div id="blocklyDiv" ></div>
+	</div>
+	<div id="buttonDiv">
+		<button id="runButton" onclick="runCode()">RUN</button>
+		<button id="runButto" onclick="showCode()">SHOW</button>
+	</div>
+	
+	<xml id="toolbox" style="display: none">
+  			<category name="Boolean">
+        		<block type="logic_compare"></block>
+        		<block type="logic_operation"></block>
+        		<block type="logic_negate"></block>
+        		<block type="logic_boolean"></block>
+        		<block type="logic_null"></block>
+        		<block type="logic_ternary"></block>
+      		</category>
+      		<category name="Loops">
+      			<block type="controls_repeat_ext">
+        			<value name="TIMES">
+          				<block type="math_number">
+            				<field name="NUM">10</field>
+          				</block>
+        			</value>
+      			</block>
+      			<block type="controls_whileUntil"></block>
+      				<block type="controls_for">
+        				<field name="VAR">i</field>
+        				<value name="FROM">
+          					<block type="math_number">
+            					<field name="NUM">1</field>
+          					</block>
+        				</value>
+        				<value name="TO">
+          					<block type="math_number">
+            					<field name="NUM">10</field>
+          					</block>
+        				</value>
+        				<value name="BY">
+          					<block type="math_number">
+            					<field name="NUM">1</field>
+          					</block>
+        				</value>
+      				</block>
+      				<block type="controls_forEach"></block>
+      				<block type="controls_flow_statements"></block>
+    		</category>
+      		<category name="Custom">
+  				<block type="move_forwd_backwd"></block>
+  			</category>
+		</xml>
+	
+	<script type="text/javascript">
+		
+		Blockly.inject(document.getElementById('blocklyDiv'),{toolbox: document.getElementById('toolbox')});
+		
+		var myInterpreter, code;
+		var execute = true;
+	
+		function showCode()
+		{
+			// Generate JavaScript code and display it.
+			Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+			var code = Blockly.JavaScript.workspaceToCode();
+			alert(code);
+		}
+		
+		function runCode()
+		{
+			Blockly.JavaScript.addReservedWords('code');
+			code = Blockly.JavaScript.workspaceToCode();
+			myInterpreter = new Interpreter(code, initApi);
+			setInterval(function(){nextStep();}, 70);
+		}
+		
+		function initApi(interpreter, scope) 
+		{
+			  // Add an API function for the alert() block.
+			var wrapper = function(text) 
+			{
+			    text = text ? text.toString() : '';
+			    return interpreter.createPrimitive(alert(text));
+			};
+			  interpreter.setProperty(scope, 'alert', interpreter.createNativeFunction(wrapper));
+			
+			wrapper = function(text) 
+			{
+				    text = text ? text.toString() : '';
+				    return interpreter.createPrimitive(moveUp(text));
+			};
+		    interpreter.setProperty(scope, 'moveUp', interpreter.createNativeFunction(wrapper));
+		}
+		
+		function nextStep()
+		{
+			if(execute)
+			{
+				myInterpreter.step();
+			}
+		}
+	</script>
+</body>
+</html>
