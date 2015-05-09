@@ -247,7 +247,7 @@ function Scan()
     	if ((this.game.physics.arcade.distanceBetween(tank, enemies[i].tank) < 500))
     	{
     		game.physics.arcade.collide(tank, enemies[i].tank);
-    		turret.rotation = tank.game.physics.arcade.angleBetween(tank, enemies[i].tank);
+    		//turret.rotation = tank.game.physics.arcade.angleBetween(tank, enemies[i].tank);
     		if (game.time.now > nextFire && bullets.countDead() > 0)
             {
                 nextFire = game.time.now + fireRate;
@@ -256,6 +256,7 @@ function Scan()
 
                 bullet.reset(turret.x, turret.y);
 
+                turret.rotation = tank.game.physics.arcade.angleBetween(tank, enemies[i].tank);
                 bullet.rotation = game.physics.arcade.moveToObject(bullet, enemies[i].tank, 500);
                 game.physics.arcade.collide(bullets, enemies[i].tank, bulletHitEnemy, null, this);
             }
