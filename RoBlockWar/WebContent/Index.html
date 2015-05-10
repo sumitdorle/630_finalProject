@@ -70,7 +70,7 @@
       				<block type="controls_forEach"></block>
       				<block type="controls_flow_statements"></block>
     		</category>
-      		<category name="Custom">
+      		<category name="RoBlock">
   				<block type="move_forwd_backwd"></block>
   			</category>
 		</xml>
@@ -94,7 +94,7 @@
 		{
 			Blockly.JavaScript.addReservedWords('code');
 			code = Blockly.JavaScript.workspaceToCode();
-			myInterpreter = new Interpreter(code, initApi);
+			myInterpreter = new AsyncInterpreterRunner(code, initApi);
 			setInterval(function(){nextStep();}, 70);
 		}
 		
@@ -114,6 +114,27 @@
 				    return interpreter.createPrimitive(moveUp(text));
 			};
 		    interpreter.setProperty(scope, 'moveUp', interpreter.createNativeFunction(wrapper));
+		    
+		    wrapper = function(text) 
+			{
+				    text = text ? text.toString() : '';
+				    return interpreter.createPrimitive(moveDown(text));
+			};
+		    interpreter.setProperty(scope, 'moveDown', interpreter.createNativeFunction(wrapper));
+		    
+		    wrapper = function(text) 
+			{
+				    text = text ? text.toString() : '';
+				    return interpreter.createPrimitive(moveRight(text));
+			};
+		    interpreter.setProperty(scope, 'moveRight', interpreter.createNativeFunction(wrapper));
+		    
+		    wrapper = function(text) 
+			{
+				    text = text ? text.toString() : '';
+				    return interpreter.createPrimitive(moveLeft(text));
+			};
+		    interpreter.setProperty(scope, 'moveLeft', interpreter.createNativeFunction(wrapper));
 		}
 		
 		function nextStep()

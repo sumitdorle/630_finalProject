@@ -6,11 +6,13 @@ var game = new Phaser.Game(607, 500, Phaser.AUTO, 'phaserDiv', { preload: preloa
 
 var tank, turret, earth;
 
+//variable to control the direction of tank movement
 var up = false;
 var down = false;
 var left = false;
 var right = false;
 
+//how fast the tank should move
 var moveFactor = 0;
 
 function preload()
@@ -46,6 +48,8 @@ function update()
 {
 	if(up)
 	{
+		tank.angularDrag = 30;
+		tank.angle = 90;
 		tank.body.velocity.y = -moveFactor;
 		setTimeout(function()
 		{
@@ -56,28 +60,34 @@ function update()
 	}
 	else if(down)
 	{
-		tank.body.velocity.y = moveFactor;
+		tank.angle = -90;
+		tank.body.velocity.y = moveFactor * 0.95;
 		setTimeout(function()
 		{
 			down = false;
+			tank.body.velocity.y = 0;
 			setTimeout(function(){execute = true;}, 10);
-		}, 100);
+		}, 300);
 	}
 	else if(left)
 	{
+		tank.angle = 180;
 		tank.body.velocity.x = -moveFactor;
 		setTimeout(function()
 		{
 			left = false;
+			tank.body.velocity.x = 0;
 			setTimeout(function(){execute = true;}, 10);
 		}, 300);
 	}
 	else if(right)
 	{
-		tank.body.velocity.x = moveFactor;
+		tank.angle = 0;
+		tank.body.velocity.x = moveFactor * 0.95;
 		setTimeout(function()
 		{
 			right = false;
+			tank.body.velocity.x = 0;
 			setTimeout(function(){execute = true;}, 10);
 		}, 300);
 	}
@@ -90,5 +100,26 @@ function moveUp(value)
 {
 	moveFactor = value;
 	up = true;
+	execute = false;
+}
+
+function moveDown(value)
+{
+	moveFactor = value;
+	down = true;
+	execute = false;
+}
+
+function moveRight(value)
+{
+	moveFactor = value;
+	right = true;
+	execute = false;
+}
+
+function moveLeft(value)
+{
+	moveFactor = value;
+	left = true;
 	execute = false;
 }
