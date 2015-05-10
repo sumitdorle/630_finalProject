@@ -1,19 +1,19 @@
 //var RoBlockWar = RoBlockWar || { };
+var scanDistance
 enemies = [];
-scanDistance=300;
-EnemyTank = function (index, game, player, bullets) {
+EnemyTank = function (index, game, bullets) {
 
     var x = game.world.randomX;
     var y = game.world.randomY;
 
     this.game = game;
-    this.health = 10;
-    this.player = player;
+    this.health = 3;
+    //this.player = player;
     this.bullets = bullets;
     this.fireRate = 1000;
     this.nextFire = 0;
     this.alive = true;
-
+ 
     this.shadow = game.add.sprite(x, y, 'enemy', 'shadow');
     this.tank = game.add.sprite(x, y, 'enemy', 'tank1');
     this.turret = game.add.sprite(x, y, 'enemy', 'turret');
@@ -65,21 +65,21 @@ EnemyTank.prototype.update = function() {
     
     for(i=0;i<enemies.length;i++)
     {
-    	if ((this.tank.name!=enemies[i].tank.name)&& (enemies[i].tank.alive==true)&&
+    	if ((this.tank.name!=enemies[i].tank.name)&&
     		(this.game.physics.arcade.distanceBetween(this.tank, enemies[i].tank) < 200))
     	{
     		game.physics.arcade.collide(this.tank, enemies[i].tank);
-    		
+    		this.turret.rotation = this.game.physics.arcade.angleBetween(this.tank, enemies[i].tank);
     		if (this.game.time.now > this.nextFire && this.bullets.countDead() > 0)
             {
                 this.nextFire = this.game.time.now + this.fireRate;
 
                 var bullet = this.bullets.getFirstDead();
-                this.turret.rotation = this.game.physics.arcade.angleBetween(this.tank, enemies[i].tank);
+
                 bullet.reset(this.turret.x, this.turret.y);
-                
+
                 bullet.rotation = this.game.physics.arcade.moveToObject(bullet, enemies[i].tank, 500);
-                game.physics.arcade.collide(this.bullets, enemies[i].tank, bulletHitEnemy, null, this);
+                game.physics.arcade.overlap(this.bullets, enemies[i].tank, bulletHitEnemy, null, this);
             }
     	}
     }
@@ -101,7 +101,7 @@ EnemyTank.prototype.update = function() {
 
 function Main(blocklyCode)
 {
-
+alert("hhh");
 	var count;
 	//test();
 	//need to check the blockly code in workspace
@@ -152,21 +152,7 @@ function create ()
     land = game.add.tileSprite(0, 0, 800, 600, 'earth');
     land.fixedToCamera = true;
 
-    //  The base of our tank
-    tank = game.add.sprite(0, 0, 'tank', 'tank1');
-    tank.anchor.setTo(0.5, 0.5);
-    tank.animations.add('move', ['tank1', 'tank2', 'tank3', 'tank4', 'tank5', 'tank6'], 20, true);
-
-    //  This will force it to decelerate and limit its speed
-    game.physics.enable(tank, Phaser.Physics.ARCADE);
-    tank.body.drag.set(0.2);
-    tank.body.maxVelocity.setTo(400, 400);
-    tank.body.collideWorldBounds = true;
-
-    //  Finally the turret that we place on-top of the tank body
-    turret = game.add.sprite(0, 0, 'tank', 'turret');
-    turret.anchor.setTo(0.3, 0.5);
-
+    
     //  The enemies bullet group
     enemyBullets = game.add.group();
     enemyBullets.enableBody = true;
@@ -188,21 +174,6 @@ function create ()
     {
         enemies.push(new EnemyTank(i, game, tank, enemyBullets));
     }
-
-    //  A shadow below our tank
-    shadow = game.add.sprite(0, 0, 'tank', 'shadow');
-    shadow.anchor.setTo(0.5, 0.5);
-
-    //  Our bullet group
-    bullets = game.add.group();
-    bullets.enableBody = true;
-    bullets.physicsBodyType = Phaser.Physics.ARCADE;
-    bullets.createMultiple(30, 'bullet', 0, false);
-    bullets.setAll('anchor.x', 0.5);
-    bullets.setAll('anchor.y', 0.5);
-    bullets.setAll('outOfBoundsKill', true);
-    bullets.setAll('checkWorldBounds', true);
-
     //  Explosion pool
     explosions = game.add.group();
 
@@ -213,18 +184,7 @@ function create ()
         explosionAnimation.animations.add('kaboom');
     }
 
-    tank.bringToTop();
-    turret.bringToTop();
-
-    logo = game.add.sprite(0, 200, 'logo');
-    logo.fixedToCamera = true;
-
-    game.input.onDown.add(removeLogo, this);
-
-    game.camera.follow(tank);
-    game.camera.deadzone = new Phaser.Rectangle(150, 150, 500, 300);
-    game.camera.focusOnXY(0, 0);
-
+    
     cursors = game.input.keyboard.createCursorKeys();
 }
 
@@ -237,7 +197,7 @@ function removeLogo () {
 
 function update()
 {
-game.physics.arcade.overlap(enemyBullets, tank, bulletHitPlayer, null, this);
+
     enemiesAlive = 0;
     
     for (var i = 0; i < enemies.length; i++)
@@ -246,68 +206,14 @@ game.physics.arcade.overlap(enemyBullets, tank, bulletHitPlayer, null, this);
         {
             enemiesAlive++;
             //game.physics.arcade.collide(tank, enemies[i].tank);
-            game.physics.arcade.overlap(bullets, enemies[i].tank, bulletHitEnemy, null, this);
+            //game.physics.arcade.overlap(bullets, enemies[i].tank, bulletHitEnemy, null, this);
             enemies[i].update();
         }
     }
-
-    if (cursors.left.isDown)
-    {
-        tank.angle -= 4;
-    }
-    else if (cursors.right.isDown)
-    {
-        tank.angle += 4;
-    }
-
-    if (cursors.up.isDown)
-    {
-        //  The speed we'll travel at
-        currentSpeed = 300;
-    }
-    else
-    {
-        if (currentSpeed > 0)
-        {
-            currentSpeed -= 4;
-        }
-    }
-
-    if (currentSpeed > 0)
-    {
-    	tank.angle += 4;
-        game.physics.arcade.velocityFromRotation(tank.rotation, currentSpeed, tank.body.velocity);
-    }
-
-    land.tilePosition.x = -game.camera.x;
-    land.tilePosition.y = -game.camera.y;
-
-    //  Position all the parts and align rotations
-    shadow.x = tank.x;
-    shadow.y = tank.y;
-    shadow.rotation = tank.rotation;
-
-    turret.x = tank.x;
-    turret.y = tank.y;
-
-    turret.rotation = game.physics.arcade.angleToPointer(turret);
-
-    if (game.input.activePointer.isDown)
-    {
-        //  Boom!
-        fire();
-    }
-
-}
-
-function bulletHitPlayer (tank, bullet) {
-
-    bullet.kill();
-
 }
 
 function bulletHitEnemy (tank, bullet) {
-
+alert("Hi");
     bullet.kill();
 
     var destroyed = enemies[tank.name].damage();
@@ -317,7 +223,6 @@ function bulletHitEnemy (tank, bullet) {
         var explosionAnimation = explosions.getFirstExists(false);
         explosionAnimation.reset(tank.x, tank.y);
         explosionAnimation.play('kaboom', 30, false, true);
-        
     }
 
 }

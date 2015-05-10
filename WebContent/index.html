@@ -8,34 +8,23 @@
   	<script src="./js/blocks_compressed.js"></script>
   	<script src="./js/javascript_compressed.js"></script>
   	<script src="./js/acorn_interpreter.js"></script>
-  	<script src="./js/dudePhaser.js"></script>
+  	<!--<script src="./js/dudePhaser.js"></script>-->
   	<script src="./js/move.js"></script>
   	<script src="./js/msg/js/en.js"></script>
-	<script src="./js/basic_blocks.js"></script>
+	<script src="./js/Main.js"></script>  
+	<!-- <script src="./js/Tank.js"></script> -->
 </head>
 <body>
 	<div align="center">
 		<h2>Blockly Dude</h2>
-		<div id="gameArea" style="height: 480px; width: 500px; border: solid 1px;"></div>
+		<div id="gameArea" style="height: 480px; width: 620px; border: solid 1px;"></div>
 		<br/>
 		<div id="blocklyDiv" style="height: 480px; width: 500px; border: solid 1px;"></div>
 		<button onclick="showCode()">Show JavaScript</button>
 		<button onclick="runCode()">Run JavaScript</button>
 		
 		<xml id="toolbox" style="display: none">
-  			<block type="move_forwd_backwd"></block>
-            <block type="fire"></block>	
-            <block type="scan"></block>	
-            <block type="stop"></block>	
-            <block type="tank_loc_x"></block>	
-            <block type="tank_loc_y"></block>	
-            <block type="tank_speed"></block>	
-            <block type="tank_health"></block>	
-            <block type="comparison"></block>		
-            <block type="condition_block"></block>	
-            <block type="true_false"></block>	
-            <block type="register_get"></block>	
-            <block type="register_set"></block>				
+  			<block type="move_forwd_backwd"></block>	
 		</xml>
 		
 		<script type="text/javascript">
@@ -77,6 +66,13 @@
 				    return interpreter.createPrimitive(moveForward(text));
 			};
 		    interpreter.setProperty(scope, 'moveForward', interpreter.createNativeFunction(wrapper));
+			
+				wrapper = function(text) 
+			{
+				    //text = text ? text.toString() : '';
+				    return interpreter.createPrimitive(Main(text));
+			};
+		    interpreter.setProperty(scope, 'Main', interpreter.createNativeFunction(wrapper));
 		}
 		</script>
 		

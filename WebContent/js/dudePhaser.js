@@ -3,16 +3,15 @@
  */
 var x_move = 0;
 var star;
-var game = new Phaser.Game(470, 480, Phaser.AUTO, 'gameArea', { preload: preload, create: create, update: update });;
+var game = new Phaser.Game(470, 480, Phaser.AUTO, 'gameArea', { preload: preload, create: create, update: update });
 	//var game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameArea', { preload: preload, create: create, update: update });
 //var game = new Phaser.Game(470, 480, Phaser.AUTO, 'gameArea');
-function preload() {
-alert("in preload");
+function preload() 
+{
     game.load.image('sky', 'assets/sky.png');
     game.load.image('ground', 'assets/platform.png');
     game.load.image('star', 'assets/star.png');
     game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
-
 }
 
 var player;

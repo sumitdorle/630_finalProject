@@ -24,11 +24,11 @@ Blockly.JavaScript['move_forwd_backwd'] = function(block) {
   var code;
   if(dropdown_direction == "forward")
   {
-	code = 'moveForward('+text_pixels+')';
+	code = 'Main('+text_pixels+')';
   }
   if(dropdown_direction == "backward")
   {
-	code = 'moveForward('+text_pixels+')';
+	code = 'Main('+text_pixels+')';
   }
   return code;
 };
