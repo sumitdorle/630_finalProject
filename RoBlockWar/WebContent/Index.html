@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>RoBlock War</title>
-	<script src="./js/phaser.min.js"></script>
+	<!-- Blockly Libraries -->
 	<script src="./js/blockly_compressed.js"></script>
   	<script src="./js/blocks_compressed.js"></script>
   	<script src="./js/javascript_compressed.js"></script>
@@ -12,8 +12,16 @@
   	<script src="./js/nativeHelpers.js"></script>
   	<script src="./js/javascript_compressed.js"></script>
   	<script src="./js/msg/js/en.js"></script>
+  	
+  	<!-- Phaser Files -->
+  	<script src="./js/phaser.min.js"></script>
   	<script src="./js/phaser/RoblockPhaser.js"></script>
-  	<script src="./js/custom_blocks/move.js"></script>
+  	
+  	
+  	<!-- Blockly Custom blocks -->
+  	<script src="./js/custom_blocks/tank_blocks.js"></script>
+	<script src="./js/custom_blocks/move.js"></script>
+	<script src="./js/custom_blocks/basic_blocks.js"></script>
   	
   	<!-- CSS -->
   	<link rel="stylesheet" type="text/css" href="./style/style.css">
@@ -72,6 +80,18 @@
     		</category>
       		<category name="RoBlock">
   				<block type="move_forwd_backwd"></block>
+  				<block type="fire"></block>	
+          	 	<block type="scan"></block>	
+            	<block type="stop"></block>	
+            	<block type="tank_loc_x"></block>	
+            	<block type="tank_loc_y"></block>	
+            	<block type="tank_speed"></block>	
+            	<block type="tank_health"></block>	
+            	<block type="comparison"></block>		
+            	<block type="condition_block"></block>	
+            	<block type="true_false"></block>	
+            	<block type="register_get"></block>	
+            	<block type="register_set"></block>
   			</category>
 		</xml>
 	

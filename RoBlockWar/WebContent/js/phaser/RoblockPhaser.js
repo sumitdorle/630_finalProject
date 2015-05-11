@@ -1,16 +1,18 @@
 /**
  * 
  */
-
 var game = new Phaser.Game(607, 500, Phaser.AUTO, 'phaserDiv', { preload: preload, create: create, update: update });
 
-var tank, turret, earth;
+var tank, turret, earth, enemies;
 
 //variable to control the direction of tank movement
 var up = false;
 var down = false;
 var left = false;
 var right = false;
+
+//Variable to turn on/off scanning in tank
+var scan_stat = false;
 
 //how fast the tank should move
 var moveFactor = 0;
@@ -92,9 +94,16 @@ function update()
 		}, 300);
 	}
 	
+	//Scan Function
+	if(scan_stat)
+	{
+		
+	}
+	
 	turret.x = tank.x;
 	turret.y = tank.y;
 }
+
 
 function moveUp(value)
 {
@@ -122,4 +131,9 @@ function moveLeft(value)
 	moveFactor = value;
 	left = true;
 	execute = false;
+}
+
+function Scanning()
+{
+	scan_stat = true;
 }
