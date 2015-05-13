@@ -44,6 +44,7 @@ EnemyTank.prototype.damage = function() {
         this.shadow.kill();
         this.tank.kill();
         this.turret.kill();
+		enemiesAlive--;
 
         return true;
     }
@@ -53,7 +54,8 @@ EnemyTank.prototype.damage = function() {
 }
 
 EnemyTank.prototype.update = function() {
-
+if(playerHealth){
+	
     this.shadow.x = this.tank.x;
     this.shadow.y = this.tank.y;
     this.shadow.rotation = this.tank.rotation;
@@ -101,10 +103,16 @@ EnemyTank.prototype.update = function() {
             bullet.rotation = this.game.physics.arcade.moveToObject(bullet, this.player, 500);
         }
     }*/
-
+}
+else{
+	stop();
+}
 };
 
 var game = new Phaser.Game(600, 500, Phaser.AUTO, 'phaserDiv', { preload: preload, create: create, update: update });
+
+var start = 0;
+var continueGame = 0;
 
 function preload() 
 {
@@ -393,18 +401,29 @@ function Scan()
     }
 }
 
+function stop(){
+	if(playerWins){
+		alert(" Player Wins!!");
+	}
+	else{
+		alert(" Player Lost!!");
+	}
+}
+
+
 function update()
 {
-	if(playerHealth){
+	if(playerHealth > 0){
+	if(continueGame && enemiesAlive){
 	game.physics.arcade.overlap(enemyBullets, tank, bulletHitPlayer, null, this);
 
-    enemiesAlive = 0;
+    //enemiesAlive = 0;
 
     for (var i = 0; i < enemies.length; i++)
     {
         if (enemies[i].alive)
         {
-            enemiesAlive++;
+            //enemiesAlive++;
             game.physics.arcade.collide(tank, enemies[i].tank);
             game.physics.arcade.overlap(bullets, enemies[i].tank, bulletHitEnemy, null, this);
             enemies[i].update();
@@ -420,6 +439,8 @@ function update()
     if (moveForward > 0)
     {
         //  The speed we'll travel at
+		//start = 0;
+		//continueGame = 1;
         currentSpeed = moveForward;
 		tank.angularDrag = 30;
 		tank.body.bounce.setTo(0.5,0.5);
@@ -486,7 +507,7 @@ function update()
         }
 	}
 	
-
+	}
 }
 
 function bulletHitPlayer (tank, bullet) {
@@ -542,6 +563,8 @@ function bulletHitEnemy (tank, bullet) {
     }
 
 }
+
+
 
 function fire () {
 
