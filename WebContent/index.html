@@ -9,7 +9,9 @@
   	<script src="./js/blocks_compressed.js"></script>
   	<script src="./js/javascript_compressed.js"></script>
   	<script src="./js/acorn_interpreter.js"></script>
-  	<script src="./js/msg/js/en.js"></script>
+  	<script src="./js/asyncHelpers.js"></script>
+  	<script src="./js/nativeHelpers.js"></script>
+	<script src="./js/msg/js/en.js"></script>
   	
   	<!-- User Phaser Files --!>
 	<script src="./js/phaser/Main.js"></script>
@@ -31,6 +33,7 @@
 		<div id="blocklyDiv" ></div>
 	</div>
 	<div id="buttonDiv">
+		<button id="showCode" onclick="showCode()">Show code</button>
 		<button id="runButton" onclick="runCode()">RUN</button>
 	</div>	
 		<xml id="toolbox" style="display: none">
@@ -74,8 +77,8 @@
     		</category>
       		<category name="Custom">
   				<block type="move_forwd_backwd"></block>
-            	<block type="fire"></block>	
-          	 	<block type="scan"></block>	
+            	<block type="scanAndFire"></block>	
+          	 	<!-- <block type="scan"></block>	 -->
             	<block type="stop"></block>	
             	<block type="tank_loc_x"></block>	
             	<block type="tank_loc_y"></block>	
@@ -93,6 +96,8 @@
 		
 		Blockly.inject(document.getElementById('blocklyDiv'),{toolbox: document.getElementById('toolbox')});
 		
+		var execute = true;
+		var myInterpreter, code;
 		
 		function showCode()
 		{
@@ -104,12 +109,14 @@
 		
 		function runCode() {
 		      // Generate JavaScript code and run it.
-		      window.LoopTrap = 1000;
+		      /*window.LoopTrap = 1000;
 		      Blockly.JavaScript.INFINITE_LOOP_TRAP =
-		          'if (--window.LoopTrap == 0) throw "Infinite loop.";\n';
-		      var code = Blockly.JavaScript.workspaceToCode();
-		      var myInterpreter = new Interpreter(code, initApi);
-		      myInterpreter.run();
+		          'if (--window.LoopTrap == 0) throw "Infinite loop.";\n';*/
+		      code = Blockly.JavaScript.workspaceToCode();
+		      myInterpreter = new AsyncInterpreterRunner(code, initApi);
+		      //myInterpreter.run();
+			  onStart();
+			  setInterval(function(){nextStep();}, 70);
 		 }
 		
 		function initApi(interpreter, scope) 
@@ -125,9 +132,31 @@
 			wrapper = function(text) 
 			{
 				    text = text ? text.toString() : '';
-				    return interpreter.createPrimitive(Main(text));
+				    return interpreter.createPrimitive(Forward(text));
 			};
-		    interpreter.setProperty(scope, 'Main', interpreter.createNativeFunction(wrapper));
+		    interpreter.setProperty(scope, 'Forward', interpreter.createNativeFunction(wrapper));
+			
+			wrapper = function(text) 
+			{
+				    text = text ? text.toString() : '';
+				    return interpreter.createPrimitive(Backward(text));
+			};
+		    interpreter.setProperty(scope, 'Backward', interpreter.createNativeFunction(wrapper));
+			
+			wrapper = function(text) 
+			{
+				    text = text ? text.toString() : '';
+				    return interpreter.createPrimitive(Scan());
+			};
+		    interpreter.setProperty(scope, 'Scan', interpreter.createNativeFunction(wrapper));
+		}
+		
+		function nextStep()
+		{
+			if(execute)
+			{
+				myInterpreter.step();
+			}
 		}
 		</script>
 </body>
