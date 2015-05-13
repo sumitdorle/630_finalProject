@@ -11,7 +11,8 @@ Blockly.Blocks['move_forwd_backwd'] = {
         .appendField("by")
         .appendField(new Blockly.FieldTextInput("1000"), "pixels")
         .appendField("pixels");
-	this.setOutput(true, "boolean");
+	this.setPreviousStatement(true);
+	this.setNextStatement(true);
     this.setTooltip('');
   }
 };
@@ -24,11 +25,11 @@ Blockly.JavaScript['move_forwd_backwd'] = function(block) {
   var code;
   if(dropdown_direction == "forward")
   {
-	code = 'Main('+text_pixels+')';
+	code = 'Forward('+text_pixels+');';
   }
   if(dropdown_direction == "backward")
   {
-	code = 'Main('+text_pixels+')';
+	code = 'Backward('+text_pixels+');';
   }
   return code;
 };

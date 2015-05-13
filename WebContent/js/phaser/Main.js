@@ -1,5 +1,6 @@
 //var RoBlockWar = RoBlockWar || { };
 enemies = [];
+//var cv = 0;
 EnemyTank = function (index, game, player, bullets) {
 
     var x = game.world.randomX;
@@ -13,10 +14,12 @@ EnemyTank = function (index, game, player, bullets) {
     this.nextFire = 0;
     this.alive = true;
 
-    this.shadow = game.add.sprite(x, y, 'enemy', 'shadow');
-    this.tank = game.add.sprite(x, y, 'enemy', 'tank1');
-    this.turret = game.add.sprite(x, y, 'enemy', 'turret');
+    this.shadow = game.add.sprite(x,y, 'enemy', 'shadow');
+    this.tank = game.add.sprite(x,y,'enemy', 'tank1');
+    this.turret = game.add.sprite(x,y, 'enemy', 'turret');
 
+	//cv = cv+80;
+	
     this.shadow.anchor.set(0.5);
     this.tank.anchor.set(0.5);
     this.turret.anchor.set(0.3, 0.5);
@@ -85,8 +88,8 @@ if(playerHealth){
                 bullet.rotation = this.game.physics.arcade.moveToObject(bullet, enemies[i].tank, 500);
 				//bulletEnemy.rotation = this.game.physics.arcade.moveToObject(bulletEnemy, enemies[i].tank, 500);
 				
-                game.physics.arcade.overlap(this.bullets, enemies[i].tank, bulletHitEnemy, null, this);
-				game.physics.arcade.overlap(enemyBullets, enemies[i].tank, bulletHitEnemy, null, this);
+                game.physics.arcade.collide(this.bullets, enemies[i].tank, bulletHitEnemy, null, this);
+				game.physics.arcade.collide(enemyBullets, enemies[i].tank, bulletHitEnemy, null, this);
             }
     	}
     }
@@ -143,7 +146,7 @@ var enemiesTotal = 7;
 var enemiesAlive = 7;
 var explosions;
 
-var playerHealth = 100;
+var playerHealth = 25;
 var playerWins = 0;
 var logo;
 
@@ -404,15 +407,31 @@ function Scan()
 function stop(){
 	if(playerWins){
 		alert(" Player Wins!!");
+		game.shutdown();
 	}
 	else{
 		alert(" Player Lost!!");
+		game.shutdown();
 	}
 }
 
 
 function update()
 {
+	/*
+	if(start){
+		onStart();
+	}
+	*/
+	if(!enemiesAlive){
+		playerWins = 1;
+		stop();
+	}
+	
+	if(enemiesAlive && !playerHealth){
+		stop();
+	}
+	
 	if(playerHealth > 0){
 	if(continueGame && enemiesAlive){
 	game.physics.arcade.overlap(enemyBullets, tank, bulletHitPlayer, null, this);
@@ -563,8 +582,6 @@ function bulletHitEnemy (tank, bullet) {
     }
 
 }
-
-
 
 function fire () {
 
