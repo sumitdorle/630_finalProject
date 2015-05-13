@@ -1,18 +1,12 @@
 ////////////////////////////////////////////////////////
 //                      Fire Block
 ////////////////////////////////////////////////////////
-Blockly.Blocks['fire'] = {
+Blockly.Blocks['scanAndFire'] = {
   init: function() {
     this.setHelpUrl('http://www.example.com/');
     this.setColour(290);
-    this.appendValueInput("DEGREE")
-        .setCheck("Number")
-        .appendField("fire(");
-    this.appendValueInput("RANGE")
-        .setCheck("Number")
-        .appendField(",");
     this.appendDummyInput()
-        .appendField(")");
+        .appendField("scan & Fire()");
     this.setInputsInline(true);
     this.setPreviousStatement(true);
     this.setNextStatement(true);
@@ -20,12 +14,10 @@ Blockly.Blocks['fire'] = {
   }
 };
 
-Blockly.JavaScript['fire'] = function(block) 
+Blockly.JavaScript['scanAndFire'] = function(block) 
 {
   // TODO: Assemble JavaScript into code variable.
-  var value_degree = block.getFieldValue('DEGREE');
-  var value_range = block.getFieldValue('RANGE');
-  var code = 'fireAtGivenRangeAndDegree(' + value_degree + ',' + value_range + ')';
+  var code = 'Scan();';
   return code;
 };
 
