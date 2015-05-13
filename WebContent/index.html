@@ -3,45 +3,101 @@
 	<head>
 	<meta charset="UTF-8">
 	<title>Blockly Dude</title>
+	<!-- Libraries --!>
 	<script src="./js/phaser.min.js"></script>
 	<script src="./js/blockly_compressed.js"></script>
   	<script src="./js/blocks_compressed.js"></script>
   	<script src="./js/javascript_compressed.js"></script>
   	<script src="./js/acorn_interpreter.js"></script>
-  	<script src="./js/dudePhaser.js"></script>
-  	<script src="./js/move.js"></script>
-  	<script src="./js/msg/js/en.js"></script>
-	<script src="./js/basic_blocks.js"></script>
+  	<script src="./js/asyncHelpers.js"></script>
+  	<script src="./js/nativeHelpers.js"></script>
+	<script src="./js/msg/js/en.js"></script>
+  	
+  	<!-- User Phaser Files --!>
+	<script src="./js/phaser/Main.js"></script>
+	
+	<!-- Custom block files --!>
+	<script src="./js/custom_blocks/tank_blocks.js"></script>
+	<script src="./js/custom_blocks/move.js"></script>
+	<script src="./js/custom_blocks/basic_blocks.js"></script>
+	
+	<!-- CSS -->
+  	<link rel="stylesheet" type="text/css" href="./style/style.css">
 </head>
 <body>
-	<div align="center">
-		<h2>Blockly Dude</h2>
-		<div id="gameArea" style="height: 480px; width: 500px; border: solid 1px;"></div>
-		<br/>
-		<div id="blocklyDiv" style="height: 480px; width: 500px; border: solid 1px;"></div>
-		<button onclick="showCode()">Show JavaScript</button>
-		<button onclick="runCode()">Run JavaScript</button>
-		
+	<div id="heading">
+		<img id="logo" src="./assets/logo1.png">
+	</div>
+	<div id="gameArea">
+		<div id="phaserDiv" ></div>
+		<div id="blocklyDiv" ></div>
+	</div>
+	<div id="buttonDiv">
+		<button id="showCode" onclick="showCode()">Show code</button>
+		<button id="runButton" onclick="runCode()">RUN</button>
+	</div>	
 		<xml id="toolbox" style="display: none">
-  			<block type="move_forwd_backwd"></block>
-            <block type="fire"></block>	
-            <block type="scan"></block>	
-            <block type="stop"></block>	
-            <block type="tank_loc_x"></block>	
-            <block type="tank_loc_y"></block>	
-            <block type="tank_speed"></block>	
-            <block type="tank_health"></block>	
-            <block type="comparison"></block>		
-            <block type="condition_block"></block>	
-            <block type="true_false"></block>	
-            <block type="register_get"></block>	
-            <block type="register_set"></block>				
+            <category name="Boolean">
+        		<block type="logic_compare"></block>
+        		<block type="logic_operation"></block>
+        		<block type="logic_negate"></block>
+        		<block type="logic_boolean"></block>
+        		<block type="logic_null"></block>
+        		<block type="logic_ternary"></block>
+      		</category>
+      		<category name="Loops">
+      			<block type="controls_repeat_ext">
+        			<value name="TIMES">
+          				<block type="math_number">
+            				<field name="NUM">10</field>
+          				</block>
+        			</value>
+      			</block>
+      			<block type="controls_whileUntil"></block>
+      				<block type="controls_for">
+        				<field name="VAR">i</field>
+        				<value name="FROM">
+          					<block type="math_number">
+            					<field name="NUM">1</field>
+          					</block>
+        				</value>
+        				<value name="TO">
+          					<block type="math_number">
+            					<field name="NUM">10</field>
+          					</block>
+        				</value>
+        				<value name="BY">
+          					<block type="math_number">
+            					<field name="NUM">1</field>
+          					</block>
+        				</value>
+      				</block>
+      				<block type="controls_forEach"></block>
+      				<block type="controls_flow_statements"></block>
+    		</category>
+      		<category name="Custom">
+  				<block type="move_forwd_backwd"></block>
+            	<block type="scanAndFire"></block>	
+          	 	<!-- <block type="scan"></block>	 -->
+            	<block type="stop"></block>	
+            	<block type="tank_loc_x"></block>	
+            	<block type="tank_loc_y"></block>	
+            	<block type="tank_speed"></block>	
+            	<block type="tank_health"></block>	
+            	<block type="comparison"></block>		
+            	<block type="condition_block"></block>	
+            	<block type="true_false"></block>	
+            	<block type="register_get"></block>	
+            	<block type="register_set"></block>
+  			</category>		
 		</xml>
 		
 		<script type="text/javascript">
 		
 		Blockly.inject(document.getElementById('blocklyDiv'),{toolbox: document.getElementById('toolbox')});
 		
+		var execute = true;
+		var myInterpreter, code;
 		
 		function showCode()
 		{
@@ -53,12 +109,14 @@
 		
 		function runCode() {
 		      // Generate JavaScript code and run it.
-		      window.LoopTrap = 1000;
+		      /*window.LoopTrap = 1000;
 		      Blockly.JavaScript.INFINITE_LOOP_TRAP =
-		          'if (--window.LoopTrap == 0) throw "Infinite loop.";\n';
-		      var code = Blockly.JavaScript.workspaceToCode();
-		      var myInterpreter = new Interpreter(code, initApi);
-		      myInterpreter.run();
+		          'if (--window.LoopTrap == 0) throw "Infinite loop.";\n';*/
+		      code = Blockly.JavaScript.workspaceToCode();
+		      myInterpreter = new AsyncInterpreterRunner(code, initApi);
+		      //myInterpreter.run();
+			  onStart();
+			  setInterval(function(){nextStep();}, 70);
 		 }
 		
 		function initApi(interpreter, scope) 
@@ -73,13 +131,33 @@
 			
 			wrapper = function(text) 
 			{
-				    //text = text ? text.toString() : '';
-				    return interpreter.createPrimitive(moveForward(text));
+				    text = text ? text.toString() : '';
+				    return interpreter.createPrimitive(Forward(text));
 			};
-		    interpreter.setProperty(scope, 'moveForward', interpreter.createNativeFunction(wrapper));
+		    interpreter.setProperty(scope, 'Forward', interpreter.createNativeFunction(wrapper));
+			
+			wrapper = function(text) 
+			{
+				    text = text ? text.toString() : '';
+				    return interpreter.createPrimitive(Backward(text));
+			};
+		    interpreter.setProperty(scope, 'Backward', interpreter.createNativeFunction(wrapper));
+			
+			wrapper = function(text) 
+			{
+				    text = text ? text.toString() : '';
+				    return interpreter.createPrimitive(Scan());
+			};
+		    interpreter.setProperty(scope, 'Scan', interpreter.createNativeFunction(wrapper));
+		}
+		
+		function nextStep()
+		{
+			if(execute)
+			{
+				myInterpreter.step();
+			}
 		}
 		</script>
-		
-	</div>
 </body>
 </html>
